@@ -28,6 +28,7 @@ export class Account extends EntityBase {
 	socketId: string;
 
 	toJSON(): Account {
+		delete this.password;
 		const obj: any = { ...this };
 		return obj;
 	}

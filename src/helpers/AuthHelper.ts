@@ -1,16 +1,15 @@
 import { Helper } from '../lib/decorators/injection';
 import { Config } from '../config';
 
-import * as jwt from 'jsonwebtoken';
-
-const Cryptr = require('cryptr');
+import Cryptr from 'cryptr';
+import jwt from 'jsonwebtoken';
 
 @Helper()
 export class AuthHelper {
 	private cryptr: any;
 
 	public constructor() {
-		this.cryptr = new Cryptr('myTotalySecretKey');
+		this.cryptr = new Cryptr(Config.token);
 	}
 
 	public encrypt(value: string): string {
