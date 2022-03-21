@@ -6,6 +6,7 @@ import { Controller, RequestMapping, RequestMethod, HttpRequest } from '../lib/d
 import { Account, AccountType } from '../entity/Account';
 
 import { AuthHelper } from '../helpers/AuthHelper';
+import { MailerHelper } from '../helpers/MailerHelper';
 import { UtilsHelper } from '../helpers/UtilsHelper';
 
 @Controller({
@@ -14,6 +15,7 @@ import { UtilsHelper } from '../helpers/UtilsHelper';
 })
 export class AuthController {
 	@Inject() private authHelper: AuthHelper;
+	@Inject() private mailerHelper: MailerHelper;
 	@Inject() private utilsHelper: UtilsHelper;
 
 	@InjectRepository(Account) private accountRepo: Repository<Account>;
@@ -66,15 +68,9 @@ export class AuthController {
 		const email: string = req.body.email;
 		const password: string = req.body.password;
 		const confirmPassword: string = req.body.confirm_password;
-		const acceptTerms: boolean = req.body.terms;
 
-		if (!email || !password || !confirmPassword || !acceptTerms) {
+		if (!email || !password || !confirmPassword) {
 			return Promise.reject({ message: 'Missing data' });
-		}
-
-		// Accept terms
-		if (!acceptTerms) {
-			return Promise.reject({ message: 'You must accept the terms' });
 		}
 
 		// Check if the email is valid
@@ -104,5 +100,13 @@ export class AuthController {
 		newAccount.email = email;
 		newAccount.password = this.authHelper.encrypt(password);
 		await this.accountRepo.insert(newAccount);
+
+		// Send welcome email
+		this.mailerHelper.sendWelcomeEmail(newAccount);
+
+		return Promise.resolve({
+			account: newAccount,
+			token: this.authHelper.genToken(newAccount.id)
+		});
 	}
 }

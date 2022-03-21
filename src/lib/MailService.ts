@@ -8,12 +8,12 @@ import { Config, SystemParams } from "../config";
 
 export class MailService {
 	constructor(
-		public to?: string,
-		public subject?: string,
+		public to: string,
+		public subject: string,
 		public message?: string
 	) { }
 
-	public send(template?: string, data?: any) {
+	public send(template?: string, data?: any): void {
 		if (!Config.mail.active) {
 			return;
 		}
@@ -28,23 +28,31 @@ export class MailService {
 		const transporter = nodemailer.createTransport(Config.mail.transporter);
 
 		if (template) {
-			this.readHTMLFile(path.resolve(Config.path.template, `${template}.html`), (err, html) => {
+			this.readHTMLFile(path.resolve(Config.path.templates, `${template}.html`), (err, html) => {
 				const templateFn = handlebars.compile(html);
-				mailOptions.html = templateFn(Object.assign(data || {}, {
+
+				const replacements = data || {};
+				const htmlToSend = templateFn(Object.assign(replacements, {
 					appName: SystemParams.app.name,
 					appUrl: SystemParams.app.url,
-					moment: moment()
+					current: {
+						date: moment().format('DD/MM/YYYY'),
+						time: moment().format('HH:mm:ss'),
+						year: moment().format('YYYY')
+					}
 				}));
+
+				mailOptions.html = htmlToSend;
 			});
 		}
 
-		transporter.sendMail(mailOptions, (error, info) => {
+		return transporter.sendMail(mailOptions, (error, info) => {
 			if (error) {
 				console.error('sendMail', error);
-				return false;
 			} else {
-				console.info('sendMail', info)
-				return true;
+				if (info) {
+					console.info('sendMail', info)
+				}
 			}
 		});
 	}

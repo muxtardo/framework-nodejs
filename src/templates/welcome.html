@@ -1,0 +1,32 @@
+<style type="text/css">
+	* {
+		font-family: Verdana, Arial, sans-serif;
+	}
+</style>
+<div style="background: #fff; padding: 0; font-size: 12px;">
+	<div style="background: #f8f6f7; width: 600px; margin: 0 auto; padding: 20px 40px; color: #222">
+		<div style="background: #fff; padding: 20px 40px">
+			<h2>Welcome to {{ appName }}!</h2>
+			<p>Below is your registration details.</p>
+			<table style="font-size: 12px;">
+				<tr>
+					<th style="text-align: left;">E-mail:</th>
+					<td>{{ email }}</td>
+				</tr>
+			</table><br />
+
+			<p>Now you can access and browse our website!</p>
+			<table style="font-size: 12px;">
+				<tr>
+					<th style="text-align: right;">Access Account:</th>
+					<td>
+						<a href="{{ appUrl }}" target="_blank">{{ appUrl }}</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<p style="text-align: center; margin-bottom: 0">
+			&copy;{{ current.year }} - <b>{{ appName }}</b> | All rights reserved.
+		</p>
+	</div>
+</div>
