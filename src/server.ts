@@ -45,6 +45,6 @@ import { ExampleCron } from './cron/ExampleCron';
 
 export class AppServer implements Init {
 	onInit() {
-		console.log(`[SERVER] ${SystemParams.app.name} Online`);
+		console.log(`[SERVER] ${SystemParams.app.name} is online!`);
 	}
 }

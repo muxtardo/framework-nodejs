@@ -3,7 +3,7 @@ import { Express, IRoute, Response, NextFunction, RequestHandler, Router } from 
 import { CommandLine } from '../command/commands';
 import { Type, TypeDecorator, TypedMethodDecorator, PromiseMethod } from '../main';
 import { createConnection, Connection, FindOperator, FindOperatorType, getRepository } from 'typeorm';
-import { Map, HashMap, ConditionalExecutor } from './../main/map';
+import { Map, HashMap } from './../main/map';
 import { addToInjectionChain, processInjectionChain, getFromInjectionChain } from './injection';
 import { ScheduleAll } from './cron';
 import { HttpStatus, HttpError } from '../main/http';
@@ -11,13 +11,11 @@ import express from 'express';
 import addRequestId from 'express-request-id';
 import * as jwt from 'jsonwebtoken';
 import session from 'express-session';
-import * as cluster from 'cluster';
 import { Server as ioServer } from "socket.io";
 
-import { Config } from '../../config';
+import { Config, SystemParams } from '../../config';
 import { Account } from '../../entity/Account';
 const http = require('http');
-
 
 class FindOperatorWithExtras<T> extends FindOperator<T> {
 	constructor(
@@ -217,12 +215,10 @@ export function Server(options: ServerOptions): TypeDecorator {
 	return (target: Type<any>) => {
 		addToInjectionChain(target);
 
-		ConditionalExecutor.create(() => {
-			createServerAndListen(options).then(() => {
-				ScheduleAll();
-				console.log(`[SERVER] Listening to ${CommandLine.port}`);
-			});
-		}).doIf(() => cluster.isMaster).execute();
+		createServerAndListen(options).then(() => {
+			ScheduleAll();
+			console.log(`[SERVER] Listening to port:`, CommandLine.port);
+		});
 
 		return target;
 	}
@@ -255,7 +251,7 @@ function createServerAndListen(options: ServerOptions) {
 				let httpServer = http.Server(AppServer);
 				AppServer.use('/', appRouter);
 				AppServer.get('/', (req, res) => {
-					res.json({ message: 'Hello, welcome to World Wide Web!' })
+					res.json({ message: `Welcome to ${SystemParams.app.name}!` })
 				});
 
 				const io = new ioServer(httpServer);
