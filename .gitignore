@@ -1,0 +1,6 @@
+*.vscode
+config.ts
+config.prod.ts
+
+dist/
+node_modules/
