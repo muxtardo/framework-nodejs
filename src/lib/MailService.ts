@@ -49,10 +49,6 @@ export class MailService {
 		return transporter.sendMail(mailOptions, (error, info) => {
 			if (error) {
 				console.error('sendMail', error);
-			} else {
-				if (info) {
-					console.info('sendMail', info)
-				}
 			}
 		});
 	}
