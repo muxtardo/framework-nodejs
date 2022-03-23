@@ -60,7 +60,7 @@ const checkToken = (req, res, next) => {
 		lastRequests[requestAddrees] = new Date();
 	}
 
-	let token = req.headers['Authorization'];
+	const token = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
 	if (!token) {
 		return res.status(HttpStatus.UNAUTHORIZED).json({
 			message: 'No token provided.'
