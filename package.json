@@ -1,11 +1,11 @@
 {
-	"name": "atmus-nodejs",
+	"name": "framework-nodejs",
 	"version": "1.0.0",
-	"description": "Atmus Framework NodeJS",
+	"description": "Framework NodeJS",
 	"main": "index.js",
 	"scripts": {
-		"dev": "nodemon --watch \"src/\" --exec \"ts-node src/server.ts --port=3002\" -e ts",
-		"start": "node server.js --port=4001",
+		"dev": "nodemon --watch \"src/\" --exec \"ts-node src/index.ts --port=3002\" -e ts",
+		"start": "node index.js --port=4001",
 		"build": "tsc --build"
 	},
 	"keywords": [],
