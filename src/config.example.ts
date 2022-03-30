@@ -3,7 +3,7 @@ import * as path from 'path';
 
 export const SystemParams: any = {
 	app: {
-		name: 'Atmus Framework NodeJS',
+		name: 'Framework NodeJS',
 		url: 'http://localhost',
 		email: 'example@mail.com'
 	}
