@@ -12,6 +12,10 @@ type Commands<T> = {
 };
 
 export const comandList: Commands<Environment> = {
+	token: {
+		default: 'atmusFramework',
+		alias: ['t']
+	},
 	port: {
 		default: 3001,
 		alias: ['p']
@@ -19,23 +23,15 @@ export const comandList: Commands<Environment> = {
 	requestDelay: {
 		default: 3000,
 		alias: ['rd']
-	},
-	connection: {
-		default: undefined,
-		alias: []
-	},
-	mail: {
-		default: { active: false },
-		alias: []
-	},
+	}
 };
 
 export interface Environment {
 	port?: number;
 	path?: any;
 	token?: string;
-	mail: any;
-	connection: ConnectionOptions;
+	mail?: any;
+	connection?: ConnectionOptions;
 	requestDelay?: number;
 }
 
