@@ -49,7 +49,7 @@ const checkToken = (req, res, next) => {
 			const now = new Date();
 			const lastRequest = new Date(lastRequests[requestAddrees]);
 			const diff = now.getTime() - lastRequest.getTime();
-			if (diff < Config.requestDelay) {
+			if (diff < CommandLine.requestDelay) {
 				console.log(`[SPAM] Spamming detected and protected from`, requestAddrees);
 				return res.status(HttpStatus.FORBIDDEN).json({
 					message: 'Too many requests, please wait and try again later.'
